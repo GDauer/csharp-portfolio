@@ -12,5 +12,10 @@
             this.rows = rows;
             this.pieces = new Piece[lines, rows];
         }
+
+        public Piece GetPiece(int line, int rows)
+        {
+            return pieces[line, rows];
+        }
     }
 }

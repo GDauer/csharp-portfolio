@@ -6,9 +6,9 @@ namespace chess
     {
         public static void Main(string[] args)
         {
-            Position p = new Position(10, 10);
-
-            Console.WriteLine(p);
+            Board board = new Board(8, 8);
+            
+            Screen.printBoard(board);
         }
     }
 }
