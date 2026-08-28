@@ -1,6 +1,6 @@
 ﻿namespace chess.board
 {
-    class Piece
+    abstract class Piece
     {
         public Position? position { get; set; }
         public ColorPieces colorPieces { get; protected set; }
@@ -15,9 +15,11 @@
             this.qtyMovDone = 0;
         }
 
-        public void incrementMovQty()
+        public void IncrementMovQty()
         {
             qtyMovDone++;
         }
+
+        public abstract bool[,] GetPossibleMovements();
     }
 }

@@ -24,7 +24,7 @@ namespace chess.game
         public void doMov(Position from, Position to)
         {
             Piece? piece = board.RemovePiece(from) ?? throw new AddPieceToBoardPositionException("There's no piece here to be moved");
-            piece.incrementMovQty();
+            piece.IncrementMovQty();
 
             Piece? capturedPiece = board.RemovePiece(to);
 
