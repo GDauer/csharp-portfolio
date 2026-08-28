@@ -2,17 +2,18 @@
 
 namespace chess.game
 {
-    class PositionChess
+    class PositionChess : HumanBoardPosition
     {
-        public int line {  get; set; }
-        public char row { get; set; }
         private const int chessMaxLine = 8;
         private const char chessFirstRow = 'a';
 
-        public PositionChess (char row, int line)
+        public PositionChess(char row, int line) : base(row, line)
         {
-            this.line = line;
-            this.row = row;
+        }
+
+        // Construtor que aceita a classe mãe e repassa os dados para o construtor base
+        public PositionChess(HumanBoardPosition mother) : base(mother.row, mother.line)
+        {
         }
 
         public Position ToPosition()

@@ -1,5 +1,6 @@
 ﻿using chess.board;
 using chess.board.exceptions;
+using chess.game;
 using chess.game.pieces;
 
 namespace chess
@@ -10,12 +11,26 @@ namespace chess
         {
             try
             {
-                Board board = new Board(8, 8);
-                board.AddPiece(new Tower(ColorPieces.Black, board), new Position(0, 0));
-                board.AddPiece(new King(ColorPieces.Black, board), new Position(0, 2));
-                board.AddPiece(new King(ColorPieces.White, board), new Position(4, 5));
+                GameChess chessGame = new GameChess();
 
-                Screen.PrintBoard(board);
+                while (!chessGame.isCheckMate)
+                {
+                    Console.Clear();
+                    Screen.PrintBoard(chessGame.board);
+                    //Give some space
+                    Console.WriteLine();
+                    Console.WriteLine();
+
+                    Console.Write("Type the origin position: ");
+                    PositionChess from = new PositionChess(Screen.ScreenCordinators());
+                    Position coordinatorsFrom = from.ToPosition();
+
+                    Console.Write("Type the destination position: ");
+                    PositionChess to = new PositionChess(Screen.ScreenCordinators());
+                    Position coordinatorsTo = to.ToPosition();
+
+                    chessGame.doMov(coordinatorsFrom, coordinatorsTo);
+                }
             }
             catch (AddPieceToBoardPositionException e)
             {

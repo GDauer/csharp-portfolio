@@ -25,6 +25,20 @@ namespace chess.board
             return pieces[pos.line, pos.column];
         }
 
+        public Piece? RemovePiece(Position pos)
+        {
+            Piece? aux = GetPiece(pos);
+            if (aux == null)
+            {
+                return null;
+            }
+
+            aux.position = null;
+            pieces[pos.line, pos.column] = null!;
+
+            return aux;
+        }
+
         public void AddPiece(Piece piece, Position pos)
         {
             if (!IsPositionAvaliable(pos))

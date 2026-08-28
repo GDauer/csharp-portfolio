@@ -14,7 +14,8 @@ namespace chess
         {
             for (int i = 0; i < board.lines; i++)
             {
-             Console.Write(board.lines - i + separator);
+                //Printing board separator.
+                Console.Write(board.lines - i + separator);
                 for (int j = 0; j < board.rows; j++)
                 {
                     if (board.GetPiece(i, j) == null)
@@ -33,7 +34,7 @@ namespace chess
 
         public static void PrintPiece(Piece piece)
         {
-            //Using registers to keep old values
+            //Using aux to keep old values
             ConsoleColor aux = Console.ForegroundColor;
             Console.ForegroundColor = (ConsoleColor) piece.colorPieces;
 
@@ -56,6 +57,16 @@ namespace chess
                 char letter = (char) ('a' + i);
                 Console.Write(letter + separator);
             }
+        }
+
+        public static HumanBoardPosition ScreenCordinators()
+        {
+            string input = "" + Console.ReadLine();
+            char column = input[0];
+            int line = int.Parse("" + input[1]);
+            HumanBoardPosition position = new HumanBoardPosition(column, line);
+
+            return position;
         }
     }
 }
