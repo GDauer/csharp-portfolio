@@ -42,7 +42,8 @@ namespace chess.board
         public bool IsPositionAvaliable(Position pos)
         {
             ValidatePosition(pos);
-            return GetPiece(pos) != null;
+
+            return GetPiece(pos) == null;
         }
 
         public void ValidatePosition(Position pos)
@@ -61,7 +62,7 @@ namespace chess.board
             {
                 return false;
             }
-
+            
             return true;
         }
     }
