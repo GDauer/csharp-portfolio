@@ -25,6 +25,13 @@ namespace chess
                     PositionChess from = new PositionChess(Screen.ScreenCordinators());
                     Position coordinatorsFrom = from.ToPosition();
 
+                    //Show piece's possible moves in the screen
+                    Console.Clear();
+                    bool[,] possiblePositions = chessGame.board.GetPiece(coordinatorsFrom).GetPossibleMovements();
+                    Console.WriteLine(possiblePositions);
+
+                    Screen.PrintBoard(chessGame.board, possiblePositions);
+
                     Console.Write("Type the destination position: ");
                     PositionChess to = new PositionChess(Screen.ScreenCordinators());
                     Position coordinatorsTo = to.ToPosition();

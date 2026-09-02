@@ -33,7 +33,9 @@ namespace chess.game
 
         private void setupPiecesToChessBoard()
         {
-            board.AddPiece(new Tower(ColorPieces.White, board), new PositionChess('c', 1).ToPosition());
+            board.AddPiece(new Tower(ColorPieces.White, board), new PositionChess('c', 4).ToPosition());
+            board.AddPiece(new King(ColorPieces.White, board), new PositionChess('c', 7).ToPosition());
+            board.AddPiece(new King(ColorPieces.Black, board), new PositionChess('c', 2).ToPosition());
         }
     }
 }

@@ -19,57 +19,36 @@ namespace chess.game.pieces
         public override bool[,] GetPossibleMovements()
         {
             bool[,] movements = new bool[board.lines, board.rows];
-            Position pos = new Position(0, 0);
 
-            //Up
-            pos.SetValues(pos.line - pieceStep, pos.column);
-            while (board.IsValidPosition(pos) && CanMove(pos))
+            // Define the increments to the 4 directions: [line, column]
+            // Up, Down, Right, Left
+            int[,] directions = new int[,] {
+                { -pieceStep, 0 },
+                { pieceStep, 0 },
+                { 0, pieceStep },
+                { 0, -pieceStep }
+            };
+
+            // Percorre cada uma das direções
+            for (int i = 0; i < directions.GetLength(0); i++)
             {
-                movements[pos.line, pos.column] = true;
+                int dLine = directions[i, 0];
+                int dColumn = directions[i, 1];
+                Position pos = new Position(position.line + dLine, position.column + dColumn);
 
-                if (board.GetPiece(pos) != null && board.GetPiece(pos).colorPieces != colorPieces ) {
-                    break;
-                }
-                pos.line = pos.line - pieceStep;
-            }
-
-            //Down
-            pos.SetValues(pos.line + pieceStep, pos.column);
-            while (board.IsValidPosition(pos) && CanMove(pos))
-            {
-                movements[pos.line, pos.column] = true;
-
-                if (board.GetPiece(pos) != null && board.GetPiece(pos).colorPieces != colorPieces)
+                while (board.IsValidPosition(pos) && CanMove(pos))
                 {
-                    break;
+                    movements[pos.line, pos.column] = true;
+
+                    // If there's a piece of a different color, stop
+                    if (board.GetPiece(pos) != null && board.GetPiece(pos).colorPieces != colorPieces)
+                    {
+                        break;
+                    }
+
+                    // Avança mais um passo na mesma direção
+                    pos.SetValues(pos.line + dLine, pos.column + dColumn);
                 }
-                pos.line = pos.line + pieceStep;
-            }
-
-            //Right
-            pos.SetValues(pos.line, pos.column + pieceStep);
-            while (board.IsValidPosition(pos) && CanMove(pos))
-            {
-                movements[pos.line, pos.column] = true;
-
-                if (board.GetPiece(pos) != null && board.GetPiece(pos).colorPieces != colorPieces)
-                {
-                    break;
-                }
-                pos.column = pos.column + pieceStep;
-            }
-
-            //Left
-            pos.SetValues(pos.line, pos.column - pieceStep);
-            while (board.IsValidPosition(pos) && CanMove(pos))
-            {
-                movements[pos.line, pos.column] = true;
-
-                if (board.GetPiece(pos) != null && board.GetPiece(pos).colorPieces != colorPieces)
-                {
-                    break;
-                }
-                pos.column = pos.column - pieceStep;
             }
 
             return movements;

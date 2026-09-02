@@ -1,5 +1,4 @@
 ﻿using chess.board;
-using System.Net.Quic;
 
 namespace chess
 {
@@ -18,22 +17,46 @@ namespace chess
                 Console.Write(board.lines - i + separator);
                 for (int j = 0; j < board.rows; j++)
                 {
-                    if (board.GetPiece(i, j) == null)
-                    {
-                        Console.Write(emptySpace + separator);
-                    }
-                    else
-                    {
-                        PrintPiece(board.GetPiece(i, j));
-                    }
+                    PrintPiece(board.GetPiece(i, j));
                 }
                 Console.WriteLine();
             }
             PrintAlphabet(board.rows);
         }
 
-        public static void PrintPiece(Piece piece)
+        public static void PrintBoard(Board board, bool[,] possibleMovements)
         {
+            ConsoleColor defaultBackground = Console.BackgroundColor;
+            ConsoleColor possibleBackground = ConsoleColor.DarkGray;
+
+            for (int i = 0; i < board.lines; i++)
+            {
+                //Printing board separator.
+                Console.BackgroundColor = defaultBackground;
+                Console.Write(board.lines - i + separator);
+                for (int j = 0; j < board.rows; j++)
+                {
+                    Console.BackgroundColor = defaultBackground;
+                    if (possibleMovements[i, j] == true)
+                    {
+                        Console.BackgroundColor = possibleBackground;
+                    }
+                    PrintPiece(board.GetPiece(i, j));
+                }
+                Console.WriteLine();
+            }
+            Console.BackgroundColor = defaultBackground;
+            PrintAlphabet(board.rows);
+        }
+
+        public static void PrintPiece(Piece? piece)
+        {
+            if (piece == null)
+            {
+                Console.Write(emptySpace + separator);
+                return;
+            }
+
             //Using aux to keep old values
             ConsoleColor aux = Console.ForegroundColor;
             Console.ForegroundColor = (ConsoleColor) piece.colorPieces;
