@@ -4,24 +4,24 @@ namespace chess
 {
     internal class Screen
     {
-        private const string separator = " ";
-        private const string emptySpace = "-";
-        private const int maxAlphabetQty = 26;
-        private const int minAlphabetQty = 1;
+        private const string Separator = " ";
+        private const string EmptySpace = "-";
+        private const int MaxAlphabetQty = 26;
+        private const int MinAlphabetQty = 1;
 
         public static void PrintBoard(Board board)
         {
-            for (int i = 0; i < board.lines; i++)
+            for (int i = 0; i < board.Lines; i++)
             {
                 //Printing board separator.
-                Console.Write(board.lines - i + separator);
-                for (int j = 0; j < board.rows; j++)
+                Console.Write(board.Lines - i + Separator);
+                for (int j = 0; j < board.Rows; j++)
                 {
                     PrintPiece(board.GetPiece(i, j));
                 }
                 Console.WriteLine();
             }
-            PrintAlphabet(board.rows);
+            PrintAlphabet(board.Rows);
         }
 
         public static void PrintBoard(Board board, bool[,] possibleMovements)
@@ -29,12 +29,12 @@ namespace chess
             ConsoleColor defaultBackground = Console.BackgroundColor;
             ConsoleColor possibleBackground = ConsoleColor.DarkGray;
 
-            for (int i = 0; i < board.lines; i++)
+            for (int i = 0; i < board.Lines; i++)
             {
                 //Printing board separator.
                 Console.BackgroundColor = defaultBackground;
-                Console.Write(board.lines - i + separator);
-                for (int j = 0; j < board.rows; j++)
+                Console.Write(board.Lines - i + Separator);
+                for (int j = 0; j < board.Rows; j++)
                 {
                     Console.BackgroundColor = defaultBackground;
                     if (possibleMovements[i, j] == true)
@@ -46,39 +46,39 @@ namespace chess
                 Console.WriteLine();
             }
             Console.BackgroundColor = defaultBackground;
-            PrintAlphabet(board.rows);
+            PrintAlphabet(board.Rows);
         }
 
         public static void PrintPiece(Piece? piece)
         {
             if (piece == null)
             {
-                Console.Write(emptySpace + separator);
+                Console.Write(EmptySpace + Separator);
                 return;
             }
 
             //Using aux to keep old values
             ConsoleColor aux = Console.ForegroundColor;
-            Console.ForegroundColor = (ConsoleColor) piece.colorPieces;
+            Console.ForegroundColor = (ConsoleColor) piece.ColorPieces;
 
-            Console.Write(piece + separator);
+            Console.Write(piece + Separator);
 
             Console.ForegroundColor = aux;
         }
 
         public static void PrintAlphabet(int qty)
         {
-            if (qty < minAlphabetQty || qty > maxAlphabetQty)
+            if (qty < MinAlphabetQty || qty > MaxAlphabetQty)
             {
                 return;
             }
 
-            Console.Write(separator + separator);
+            Console.Write(Separator + Separator);
             for (int i = 0; i < qty; i++)
             {
                 // 'a' has the ASCII code 97. Summ with index 'i', we go futher in the alphabet.
                 char letter = (char) ('a' + i);
-                Console.Write(letter + separator);
+                Console.Write(letter + Separator);
             }
         }
 

@@ -4,8 +4,8 @@ namespace chess.game.pieces
 {
     internal sealed class King : Piece
     {
-        private const string identifier = "K";
-        private const int pieceStep = 1;
+        private const string Identifier = "K";
+        private const int PieceStep = 1;
 
         public King(ColorPieces colorPieces, Board board) : base(colorPieces, board)
         {
@@ -13,23 +13,23 @@ namespace chess.game.pieces
 
         public override string ToString()
         {
-            return identifier;
+            return Identifier;
         }
 
         public override bool[,] GetPossibleMovements()
         {
-            bool[,] movements = new bool[board.lines, board.rows];
+            bool[,] movements = new bool[Board.Lines, Board.Rows];
 
             // Define the increments for all 8 possible directions (Horizontals, Verticals, and Diagonals)
             int[,] directions = new int[,] {
-                { -pieceStep, 0 },  // Up
-                { pieceStep, 0 },   // Down
-                { 0, pieceStep },   // Right
-                { 0, -pieceStep },  // Left
-                { -pieceStep, -pieceStep }, // Top-Left Diagonal
-                { -pieceStep, pieceStep },  // Top-Right Diagonal
-                { pieceStep, -pieceStep },  // Bottom-Left Diagonal
-                { pieceStep, pieceStep }    // Bottom-Right Diagonal
+                { -PieceStep, 0 },  // Up
+                { PieceStep, 0 },   // Down
+                { 0, PieceStep },   // Right
+                { 0, -PieceStep },  // Left
+                { -PieceStep, -PieceStep }, // Top-Left Diagonal
+                { -PieceStep, PieceStep },  // Top-Right Diagonal
+                { PieceStep, -PieceStep },  // Bottom-Left Diagonal
+                { PieceStep, PieceStep }    // Bottom-Right Diagonal
             };
 
             // Iterate through each of the 8 directions
@@ -39,23 +39,16 @@ namespace chess.game.pieces
                 int dColumn = directions[i, 1];
 
                 // The King only checks the immediate neighboring square
-                Position pos = new Position(position.line + dLine, position.column + dColumn);
+                Position pos = new Position(Position.Line + dLine, Position.Column + dColumn);
 
                 // If the position is valid and the King can move there, mark it as true
-                if (board.IsValidPosition(pos) && CanMove(pos))
+                if (Board.IsValidPosition(pos) && CanMove(pos))
                 {
-                    movements[pos.line, pos.column] = true;
+                    movements[pos.Line, pos.Column] = true;
                 }
             }
 
             return movements;
-        }
-
-        private bool CanMove(Position pos)
-        {
-            Piece piece = board.GetPiece(pos);
-
-            return piece == null || piece.colorPieces != colorPieces;
         }
     }
 }

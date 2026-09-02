@@ -13,34 +13,51 @@ namespace chess
             {
                 GameChess chessGame = new GameChess();
 
-                while (!chessGame.isCheckMate)
+                while (!chessGame.IsCheckMate)
                 {
-                    Console.Clear();
-                    Screen.PrintBoard(chessGame.board);
-                    //Give some space
-                    Console.WriteLine();
-                    Console.WriteLine();
+                    try
+                    {
+                        Console.Clear();
+                        Screen.PrintBoard(chessGame.Board);
+                        //Give some space
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine("Current Turn: " + chessGame.Turn);
+                        Console.WriteLine("Waiting for the player: " + chessGame.ActualPlayer);
+                        Console.WriteLine();
+                        Console.Write("Type the origin position: ");
 
-                    Console.Write("Type the origin position: ");
-                    PositionChess from = new PositionChess(Screen.ScreenCordinators());
-                    Position coordinatorsFrom = from.ToPosition();
+                        PositionChess from = new PositionChess(Screen.ScreenCordinators());
+                        Position coordinatorsFrom = from.ToPosition();
 
-                    //Show piece's possible moves in the screen
-                    Console.Clear();
-                    bool[,] possiblePositions = chessGame.board.GetPiece(coordinatorsFrom).GetPossibleMovements();
-                    Console.WriteLine(possiblePositions);
+                        //Show piece's possible moves in the screen
+                        chessGame.ValidateOriginPosition(coordinatorsFrom);
+                        Console.Clear();
+                        bool[,] possiblePositions = chessGame.Board.GetPiece(coordinatorsFrom).GetPossibleMovements();
 
-                    Screen.PrintBoard(chessGame.board, possiblePositions);
+                        Screen.PrintBoard(chessGame.Board, possiblePositions);
+                        //Give some space
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.Write("Type the destination position: ");
 
-                    Console.Write("Type the destination position: ");
-                    PositionChess to = new PositionChess(Screen.ScreenCordinators());
-                    Position coordinatorsTo = to.ToPosition();
+                        PositionChess to = new PositionChess(Screen.ScreenCordinators());
+                        Position coordinatorsTo = to.ToPosition();
+                        chessGame.ValidateDestinationPosition(coordinatorsFrom, coordinatorsTo);
 
-                    chessGame.doMov(coordinatorsFrom, coordinatorsTo);
+                        chessGame.Play(coordinatorsFrom, coordinatorsTo);
+                    } catch (AddPieceToBoardPositionException e)
+                    {
+                        Console.Clear();
+                        Console.WriteLine(e.Message);
+                        Console.WriteLine("Press Enter to Play again!");
+                        Console.ReadLine();
+                    }
                 }
             }
-            catch (AddPieceToBoardPositionException e)
+            catch (Exception e)
             {
+                Console.Clear();
                 Console.WriteLine(e.Message);
             }
         }

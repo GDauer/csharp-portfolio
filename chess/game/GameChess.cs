@@ -6,36 +6,81 @@ namespace chess.game
 {
     class GameChess
     {
-        public Board board { get; private set; }
-        private int turn;
-        private ColorPieces actualPlayer;
-        public bool isCheckMate { get; private set; }
-        private const int chessBoardSize = 8;
+        public Board Board { get; private set; }
+        public int Turn { get; private set; }
+        public ColorPieces ActualPlayer {  get; private set; }
+        public bool IsCheckMate { get; private set; }
+        private const int ChessBoardSize = 8;
 
         public GameChess()
         {
-            board = new Board(chessBoardSize, chessBoardSize);
-            turn = 1;
-            actualPlayer = ColorPieces.White;
-            isCheckMate = false;
-            setupPiecesToChessBoard();
+            Board = new Board(ChessBoardSize, ChessBoardSize);
+            Turn = 1;
+            ActualPlayer = ColorPieces.White;
+            IsCheckMate = false;
+            SetupPiecesToChessBoard();
         }
 
-        public void doMov(Position from, Position to)
+        public void Play(Position start, Position end)
         {
-            Piece? piece = board.RemovePiece(from) ?? throw new AddPieceToBoardPositionException("There's no piece here to be moved");
+            DoMov(start, end);
+            Turn++;
+
+            ChangePlayer();
+        }
+
+        public void DoMov(Position from, Position to)
+        {
+            Piece? piece = Board.RemovePiece(from) ?? throw new AddPieceToBoardPositionException("There's no piece here to be moved");
             piece.IncrementMovQty();
 
-            Piece? capturedPiece = board.RemovePiece(to);
+            Piece? capturedPiece = Board.RemovePiece(to);
 
-            board.AddPiece(piece, to);
+            Board.AddPiece(piece, to);
         }
 
-        private void setupPiecesToChessBoard()
+        private void ChangePlayer()
         {
-            board.AddPiece(new Tower(ColorPieces.White, board), new PositionChess('c', 4).ToPosition());
-            board.AddPiece(new King(ColorPieces.White, board), new PositionChess('c', 7).ToPosition());
-            board.AddPiece(new King(ColorPieces.Black, board), new PositionChess('c', 2).ToPosition());
+            if (ActualPlayer == ColorPieces.White)
+            {
+                ActualPlayer = ColorPieces.Black;
+                return;
+            }
+
+            ActualPlayer = ColorPieces.White;
+        }
+
+        public void ValidateOriginPosition(Position origin)
+        {
+            if (Board.GetPiece(origin)  == null)
+            {
+                throw new AddPieceToBoardPositionException("Origin Position can not be void. Choose an origin with a piece on it.");
+            }
+
+            if (ActualPlayer != Board.GetPiece(origin).ColorPieces)
+            {
+                throw new AddPieceToBoardPositionException("Can not move a piece from a different color.");
+            }
+
+            if (!Board.GetPiece(origin).IsAnyMovementsPossible())
+            {
+                throw new AddPieceToBoardPositionException("There's no possible movement for this piece.");
+            }
+        }
+
+        public void ValidateDestinationPosition(Position origin, Position destination)
+        {
+            if (!Board.GetPiece(origin).CanMoveToDestination(destination))
+            {
+                throw new AddPieceToBoardPositionException("Invalid destination, this piece can not go to that position.");
+            }
+        }
+
+        private void SetupPiecesToChessBoard()
+        {
+            Board.AddPiece(new Tower(ColorPieces.White, Board), new PositionChess('c', 4).ToPosition());
+            Board.AddPiece(new King(ColorPieces.White, Board), new PositionChess('c', 7).ToPosition());
+            Board.AddPiece(new King(ColorPieces.Black, Board), new PositionChess('c', 2).ToPosition());
         }
     }
 }
