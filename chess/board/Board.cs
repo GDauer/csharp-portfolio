@@ -4,25 +4,25 @@ namespace chess.board
 {
     class Board
     {
-        public int lines {  get; set; }
-        public int rows { get; set; }
-        private Piece[,] pieces;
+        public int Lines {  get; set; }
+        public int Rows { get; set; }
+        private Piece[,] Pieces;
 
         public Board (int lines, int rows)
         {
-            this.lines = lines;
-            this.rows = rows;
-            this.pieces = new Piece[lines, rows];
+            this.Lines = lines;
+            this.Rows = rows;
+            this.Pieces = new Piece[lines, rows];
         }
 
         public Piece GetPiece(int line, int rows)
         {
-            return pieces[line, rows];
+            return Pieces[line, rows];
         }
 
         public Piece GetPiece(Position pos)
         {
-            return pieces[pos.line, pos.column];
+            return Pieces[pos.Line, pos.Column];
         }
 
         public Piece? RemovePiece(Position pos)
@@ -33,8 +33,8 @@ namespace chess.board
                 return null;
             }
 
-            aux.position = null;
-            pieces[pos.line, pos.column] = null!;
+            aux.Position = null;
+            Pieces[pos.Line, pos.Column] = null!;
 
             return aux;
         }
@@ -44,13 +44,13 @@ namespace chess.board
             if (!IsPositionAvaliable(pos))
             {
                 throw new AddPieceToBoardPositionException(
-                    "This position is not avaliable (" + pos.line + ", " + pos.column + ")" +
+                    "This position is not avaliable (" + pos.Line + ", " + pos.Column + ")" +
                     " for the Piece: " + piece + ", 'cause there's another piece is this position"
                 );
             }
 
-            pieces[pos.line, pos.column] = piece;
-            piece.position = pos;
+            Pieces[pos.Line, pos.Column] = piece;
+            piece.Position = pos;
         }
 
         public bool IsPositionAvaliable(Position pos)
@@ -65,14 +65,14 @@ namespace chess.board
             if (!IsValidPosition(pos))
             {
                 throw new AddPieceToBoardPositionException(
-                    "Invalid Position Range (" + pos.line + ", " + pos.column + ") for the board: " + lines + ", " + rows
+                    "Invalid Position Range (" + pos.Line + ", " + pos.Column + ") for the board: " + Lines + ", " + Rows
                 );
             }
         }
 
         public bool IsValidPosition(Position pos)
         {
-            if (pos.line < 0 || pos.line >= lines || pos.column < 0 || pos.column >= rows)
+            if (pos.Line < 0 || pos.Line >= Lines || pos.Column < 0 || pos.Column >= Rows)
             {
                 return false;
             }
