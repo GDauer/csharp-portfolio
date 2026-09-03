@@ -20,6 +20,19 @@ namespace chess
             Console.WriteLine("Current Turn: " + chessGame.Turn);
             Console.WriteLine("Waiting for the player: " + chessGame.ActualPlayer);
             Console.WriteLine();
+
+            if (chessGame.IsCheck)
+            {
+                PrintCheckWarning();
+            }
+        }
+
+        private static void PrintCheckWarning()
+        {
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("YOU'RE IN CHECK!");
+            Console.ForegroundColor = aux;
         }
 
         public static void PrintCapturedPieces(GameChess chessGame)

@@ -20,6 +20,11 @@
             QtyMovDone++;
         }
 
+        public void DecrementMovQty()
+        {
+            QtyMovDone--;
+        }
+
         public bool IsAnyMovementsPossible()
         {
             bool[,] possibleMoviments = GetPossibleMovements();
