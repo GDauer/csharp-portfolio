@@ -11,6 +11,8 @@ namespace chess.game
         public ColorPieces ActualPlayer {  get; private set; }
         public bool IsCheckMate { get; private set; }
         private const int ChessBoardSize = 8;
+        private HashSet<Piece> Pieces;
+        private HashSet<Piece> CapturedPieces;
 
         public GameChess()
         {
@@ -18,6 +20,8 @@ namespace chess.game
             Turn = 1;
             ActualPlayer = ColorPieces.White;
             IsCheckMate = false;
+            Pieces = new HashSet<Piece>();
+            CapturedPieces = new HashSet<Piece>();
             SetupPiecesToChessBoard();
         }
 
@@ -35,7 +39,10 @@ namespace chess.game
             piece.IncrementMovQty();
 
             Piece? capturedPiece = Board.RemovePiece(to);
-
+            if (capturedPiece != null)
+            {
+                CapturedPieces.Add(capturedPiece);
+            }
             Board.AddPiece(piece, to);
         }
 
@@ -78,9 +85,44 @@ namespace chess.game
 
         private void SetupPiecesToChessBoard()
         {
-            Board.AddPiece(new Tower(ColorPieces.White, Board), new PositionChess('c', 4).ToPosition());
-            Board.AddPiece(new King(ColorPieces.White, Board), new PositionChess('c', 7).ToPosition());
-            Board.AddPiece(new King(ColorPieces.Black, Board), new PositionChess('c', 2).ToPosition());
+            AddPieceToTheBoard('c', 4, new Tower(ColorPieces.White, Board));
+            AddPieceToTheBoard('c', 7, new King(ColorPieces.Black, Board));
+            AddPieceToTheBoard('c', 2, new Tower(ColorPieces.Black, Board));
+            AddPieceToTheBoard('a', 4, new King(ColorPieces.White, Board));
+        }
+
+        public void AddPieceToTheBoard(char column, int line, Piece piece)
+        {
+            Board.AddPiece(piece, new PositionChess(column, line).ToPosition());
+            Pieces.Add(piece);
+        }
+
+        public HashSet<Piece> GetCapturedPieces(ColorPieces colorPieces)
+        {
+            HashSet<Piece> aux = new HashSet<Piece>();
+            foreach (Piece piece in CapturedPieces)
+            {
+                if (piece.ColorPieces == colorPieces)
+                {
+                    aux.Add(piece);
+                }
+            }
+            return aux;
+        }
+
+        public HashSet<Piece> GetPiecesInGame(ColorPieces colorPieces)
+        {
+            HashSet<Piece> aux = new HashSet<Piece>();
+            foreach (Piece piece in Pieces)
+            {
+                if (piece.ColorPieces == colorPieces)
+                {
+                    aux.Add(piece);
+                }
+            }
+
+            aux.ExceptWith(GetCapturedPieces(colorPieces));
+            return aux;
         }
     }
 }

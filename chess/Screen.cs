@@ -1,4 +1,5 @@
 ﻿using chess.board;
+using chess.game;
 
 namespace chess
 {
@@ -8,6 +9,41 @@ namespace chess
         private const string EmptySpace = "-";
         private const int MaxAlphabetQty = 26;
         private const int MinAlphabetQty = 1;
+
+        public static void PrintGamePlay(GameChess chessGame)
+        {
+            Screen.PrintBoard(chessGame.Board);
+            //Give some space
+            Console.WriteLine();
+            Console.WriteLine();
+            PrintCapturedPieces(chessGame);
+            Console.WriteLine("Current Turn: " + chessGame.Turn);
+            Console.WriteLine("Waiting for the player: " + chessGame.ActualPlayer);
+            Console.WriteLine();
+        }
+
+        public static void PrintCapturedPieces(GameChess chessGame)
+        {
+            Console.WriteLine("Captured Pieces:");
+            Console.Write(" - Whites: ");
+            PrintPiecesCollection(chessGame.GetCapturedPieces(ColorPieces.White));
+            Console.Write(" - Blacks: ");
+            PrintPiecesCollection(chessGame.GetCapturedPieces(ColorPieces.Black));
+            Console.WriteLine();
+        }
+
+        public static void PrintPiecesCollection(HashSet<Piece> piecesCollection)
+        {
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.Write("[");
+            foreach (Piece piece in piecesCollection)
+            {
+                Console.ForegroundColor = (ConsoleColor) piece.ColorPieces;
+                Console.Write(piece + Separator);
+            }
+            Console.ForegroundColor = aux;
+            Console.WriteLine("]");
+        }
 
         public static void PrintBoard(Board board)
         {

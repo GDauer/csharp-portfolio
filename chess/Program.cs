@@ -18,13 +18,7 @@ namespace chess
                     try
                     {
                         Console.Clear();
-                        Screen.PrintBoard(chessGame.Board);
-                        //Give some space
-                        Console.WriteLine();
-                        Console.WriteLine();
-                        Console.WriteLine("Current Turn: " + chessGame.Turn);
-                        Console.WriteLine("Waiting for the player: " + chessGame.ActualPlayer);
-                        Console.WriteLine();
+                        Screen.PrintGamePlay(chessGame);
                         Console.Write("Type the origin position: ");
 
                         PositionChess from = new PositionChess(Screen.ScreenCordinators());
@@ -50,7 +44,7 @@ namespace chess
                     {
                         Console.Clear();
                         Console.WriteLine(e.Message);
-                        Console.WriteLine("Press Enter to Play again!");
+                        Console.WriteLine("Press Any Keys to Play again!");
                         Console.ReadLine();
                     }
                 }
