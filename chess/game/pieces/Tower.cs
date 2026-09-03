@@ -4,7 +4,7 @@ namespace chess.game.pieces
 {
     internal sealed class Tower : Piece
     {
-        private const string Identifier = "T";
+        private const string Identifier = "♖";
         private const int PieceStep = 1;
 
         public Tower(ColorPieces colorPieces, Board board) : base(colorPieces, board)

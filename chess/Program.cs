@@ -11,6 +11,7 @@ namespace chess
         {
             try
             {
+                Console.OutputEncoding = System.Text.Encoding.UTF8;
                 GameChess chessGame = new GameChess();
 
                 while (!chessGame.IsCheckMate)
@@ -18,7 +19,7 @@ namespace chess
                     try
                     {
                         Console.Clear();
-                        Screen.PrintGamePlay(chessGame);
+                        chessGame.PrintGamePlay();
                         Console.Write("Type the origin position: ");
 
                         PositionChess from = new PositionChess(Screen.ScreenCordinators());
@@ -48,6 +49,12 @@ namespace chess
                         Console.ReadLine();
                     }
                 }
+
+                Console.Clear();
+                chessGame.PrintGamePlay();
+                chessGame.PrintCheckMateWarning();
+                Console.WriteLine();
+                Console.WriteLine();
             }
             catch (Exception e)
             {

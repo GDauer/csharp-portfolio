@@ -12,6 +12,7 @@ namespace chess.game
         public bool IsCheckMate { get; private set; }
         public bool IsCheck {  get; private set; }
         private const int ChessBoardSize = 8;
+        private const string separator = "";
         private HashSet<Piece> Pieces;
         private HashSet<Piece> CapturedPieces;
 
@@ -27,6 +28,74 @@ namespace chess.game
             SetupPiecesToChessBoard();
         }
 
+        public void PrintGamePlay()
+        {
+            Screen.PrintBoard(Board);
+            //Give some space
+            Console.WriteLine();
+            Console.WriteLine();
+            PrintCapturedPieces();
+
+            if (!IsCheckMate)
+            {
+                Console.WriteLine("Current Turn: " + Turn);
+                Console.WriteLine("Waiting for the player: " + ActualPlayer);
+                Console.WriteLine();
+
+                if (IsCheck)
+                {
+                    PrintCheckWarning();
+                }
+            }
+        }
+
+        public void PrintCapturedPieces()
+        {
+            Console.WriteLine("Captured Pieces:");
+            Console.Write(" - Whites: ");
+            PrintPiecesCollection(GetCapturedPieces(ColorPieces.White));
+            Console.Write(" - Blacks: ");
+            PrintPiecesCollection(GetCapturedPieces(ColorPieces.Black));
+            Console.WriteLine();
+        }
+
+        public static void PrintPiecesCollection(HashSet<Piece> piecesCollection)
+        {
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.Write("[");
+            foreach (Piece piece in piecesCollection)
+            {
+                Console.ForegroundColor = (ConsoleColor)piece.ColorPieces;
+                Console.Write(piece + separator);
+            }
+            Console.ForegroundColor = aux;
+            Console.WriteLine("]");
+        }
+
+        private static void PrintCheckWarning()
+        {
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("YOU'RE IN CHECK!");
+            Console.ForegroundColor = aux;
+        }
+
+        public void PrintCheckMateWarning()
+        {
+            Console.WriteLine();
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("CHECK MATE!");
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("WINNER: ");
+            Console.Write(ActualPlayer + separator);
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("🏆");
+            Console.ForegroundColor = aux;
+        }
+
         public void Play(Position start, Position end)
         {
             Piece? capturedPiece = DoMov(start, end);
@@ -39,9 +108,48 @@ namespace chess.game
             }
 
             IsCheck = IsKingInCheck(GetEnemyPiece(ActualPlayer));
-            Turn++;
+            IsCheckMate = IsCheckMateToPlayer(GetEnemyPiece(ActualPlayer));
 
-            ChangePlayer();
+            if (!IsCheckMate)
+            {
+                Turn++;
+                ChangePlayer();
+            }
+        }
+
+        public bool IsCheckMateToPlayer(ColorPieces colorPieces)
+        {
+            if (!IsKingInCheck(colorPieces))
+            {
+                return false;
+            }
+
+            foreach (Piece piece in GetPiecesInGame(colorPieces))
+            {
+                bool[,] possibleMoviments = piece.GetPossibleMovements();
+
+                for (int i = 0; i < Board.Lines; i++)
+                {
+                    for (int j = 0; j < Board.Rows; j++)
+                    {
+                        if (possibleMoviments[i, j])
+                        {
+                            // piece.Position will never be null here as we get it from the collection.
+                            Position origin = piece.Position;
+                            Position destination = new Position(i, j);
+                            Piece? capturedPiece = DoMov(piece.Position, destination);
+                            bool isKingInCheck = IsKingInCheck(colorPieces);
+                            UndoMovement(origin, destination, capturedPiece);
+
+                            if (!isKingInCheck)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
         }
 
         public void UndoMovement(Position origin, Position destination, Piece? capturedPiece)

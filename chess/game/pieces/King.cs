@@ -4,7 +4,7 @@ namespace chess.game.pieces
 {
     internal sealed class King : Piece
     {
-        private const string Identifier = "K";
+        private const string Identifier = "♔";
         private const int PieceStep = 1;
 
         public King(ColorPieces colorPieces, Board board) : base(colorPieces, board)
