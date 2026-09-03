@@ -12,7 +12,7 @@ namespace chess.game
         public bool IsCheckMate { get; private set; }
         public bool IsCheck {  get; private set; }
         private const int ChessBoardSize = 8;
-        private const string separator = "";
+        private const string separator = " ";
         private HashSet<Piece> Pieces;
         private HashSet<Piece> CapturedPieces;
 
@@ -221,10 +221,41 @@ namespace chess.game
 
         private void SetupPiecesToChessBoard()
         {
-            AddPieceToTheBoard('c', 4, new Tower(ColorPieces.White, Board));
-            AddPieceToTheBoard('c', 7, new King(ColorPieces.Black, Board));
-            AddPieceToTheBoard('c', 2, new Tower(ColorPieces.Black, Board));
-            AddPieceToTheBoard('a', 4, new King(ColorPieces.White, Board));
+            //Whites
+            AddPieceToTheBoard('a', 1, new Tower(ColorPieces.White, Board));
+            AddPieceToTheBoard('h', 1, new Tower(ColorPieces.White, Board));
+            AddPieceToTheBoard('b', 1, new Knight(ColorPieces.White, Board));
+            AddPieceToTheBoard('g', 1, new Knight(ColorPieces.White, Board));
+            AddPieceToTheBoard('c', 1, new Bishop(ColorPieces.White, Board));
+            AddPieceToTheBoard('f', 1, new Bishop(ColorPieces.White, Board));
+            AddPieceToTheBoard('d', 1, new Queen(ColorPieces.White, Board));
+            AddPieceToTheBoard('e', 1, new King(ColorPieces.White, Board));
+            AddPieceToTheBoard('a', 2, new Pawn(ColorPieces.White, Board));
+            AddPieceToTheBoard('b', 2, new Pawn(ColorPieces.White, Board));
+            AddPieceToTheBoard('c', 2, new Pawn(ColorPieces.White, Board));
+            AddPieceToTheBoard('d', 2, new Pawn(ColorPieces.White, Board));
+            AddPieceToTheBoard('e', 2, new Pawn(ColorPieces.White, Board));
+            AddPieceToTheBoard('f', 2, new Pawn(ColorPieces.White, Board));
+            AddPieceToTheBoard('g', 2, new Pawn(ColorPieces.White, Board));
+            AddPieceToTheBoard('h', 2, new Pawn(ColorPieces.White, Board));
+
+            //Blacks
+            AddPieceToTheBoard('a', 8, new Tower(ColorPieces.Black, Board));
+            AddPieceToTheBoard('h', 8, new Tower(ColorPieces.Black, Board));
+            AddPieceToTheBoard('b', 8, new Knight(ColorPieces.Black, Board));
+            AddPieceToTheBoard('g', 8, new Knight(ColorPieces.Black, Board));
+            AddPieceToTheBoard('c', 8, new Bishop(ColorPieces.Black, Board));
+            AddPieceToTheBoard('f', 8, new Bishop(ColorPieces.Black, Board));
+            AddPieceToTheBoard('d', 8, new Queen(ColorPieces.Black, Board));
+            AddPieceToTheBoard('e', 8, new King(ColorPieces.Black, Board));
+            AddPieceToTheBoard('a', 7, new Pawn(ColorPieces.Black, Board));
+            AddPieceToTheBoard('b', 7, new Pawn(ColorPieces.Black, Board));
+            AddPieceToTheBoard('c', 7, new Pawn(ColorPieces.Black, Board));
+            AddPieceToTheBoard('d', 7, new Pawn(ColorPieces.Black, Board));
+            AddPieceToTheBoard('e', 7, new Pawn(ColorPieces.Black, Board));
+            AddPieceToTheBoard('f', 7, new Pawn(ColorPieces.Black, Board));
+            AddPieceToTheBoard('g', 7, new Pawn(ColorPieces.Black, Board));
+            AddPieceToTheBoard('h', 7, new Pawn(ColorPieces.Black, Board));
         }
 
         public void AddPieceToTheBoard(char column, int line, Piece piece)
