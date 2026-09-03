@@ -165,6 +165,8 @@ namespace chess.game
             }
 
             Board.AddPiece(piece, origin);
+            UndoSmallRoqueMov(piece, origin, destination);
+            UndoBiggerRoqueMov(piece, origin, destination);
         }
 
         public Piece? DoMov(Position from, Position to)
@@ -178,8 +180,62 @@ namespace chess.game
                 CapturedPieces.Add(capturedPiece);
             }
             Board.AddPiece(piece, to);
+            DoSmallRoqueMov(piece, from, to);
+            DoBiggerRoqueMov(piece, from, to);
 
             return capturedPiece;
+        }
+
+        private void DoSmallRoqueMov(Piece piece, Position from, Position to)
+        {
+            if (piece is King && from.Column == to.Column - King.SmallRoqueStepDistance + King.PieceStep)
+            {
+                Position originTower = new Position(from.Line, from.Column + King.SmallRoqueStepDistance);
+                Position destinationTower = new Position(from.Line, from.Column + King.PieceStep);
+                Piece? tower = Board.RemovePiece(originTower);
+
+                tower.IncrementMovQty();
+                Board.AddPiece(tower, destinationTower);
+            }
+        }
+
+        private void UndoSmallRoqueMov(Piece piece, Position from, Position to)
+        {
+            if (piece is King && from.Column == to.Column - King.SmallRoqueStepDistance + King.PieceStep)
+            {
+                Position originTower = new Position(from.Line, from.Column + King.SmallRoqueStepDistance);
+                Position destinationTower = new Position(from.Line, from.Column + King.PieceStep);
+                Piece? tower = Board.RemovePiece(destinationTower);
+
+                tower.DecrementMovQty();
+                Board.AddPiece(tower, originTower);
+            }
+        }
+
+        private void DoBiggerRoqueMov(Piece piece, Position from, Position to)
+        {
+            if (piece is King && from.Column == to.Column + King.BiggerRoqueStepDistance - King.PieceStep - King.PieceStep)
+            {
+                Position originTower = new Position(from.Line, from.Column - King.BiggerRoqueStepDistance);
+                Position destinationTower = new Position(from.Line, from.Column - King.PieceStep);
+                Piece? tower = Board.RemovePiece(originTower);
+
+                tower.IncrementMovQty();
+                Board.AddPiece(tower, destinationTower);
+            }
+        }
+
+        private void UndoBiggerRoqueMov(Piece piece, Position from, Position to)
+        {
+            if (piece is King && from.Column == to.Column + King.BiggerRoqueStepDistance - King.PieceStep - King.PieceStep)
+            {
+                Position originTower = new Position(from.Line, from.Column - King.BiggerRoqueStepDistance);
+                Position destinationTower = new Position(from.Line, from.Column - King.PieceStep);
+                Piece? tower = Board.RemovePiece(destinationTower);
+
+                tower.DecrementMovQty();
+                Board.AddPiece(tower, originTower);
+            }
         }
 
         private void ChangePlayer()
@@ -229,7 +285,7 @@ namespace chess.game
             AddPieceToTheBoard('c', 1, new Bishop(ColorPieces.White, Board));
             AddPieceToTheBoard('f', 1, new Bishop(ColorPieces.White, Board));
             AddPieceToTheBoard('d', 1, new Queen(ColorPieces.White, Board));
-            AddPieceToTheBoard('e', 1, new King(ColorPieces.White, Board));
+            AddPieceToTheBoard('e', 1, new King(ColorPieces.White, Board, this));
             AddPieceToTheBoard('a', 2, new Pawn(ColorPieces.White, Board));
             AddPieceToTheBoard('b', 2, new Pawn(ColorPieces.White, Board));
             AddPieceToTheBoard('c', 2, new Pawn(ColorPieces.White, Board));
@@ -247,7 +303,7 @@ namespace chess.game
             AddPieceToTheBoard('c', 8, new Bishop(ColorPieces.Black, Board));
             AddPieceToTheBoard('f', 8, new Bishop(ColorPieces.Black, Board));
             AddPieceToTheBoard('d', 8, new Queen(ColorPieces.Black, Board));
-            AddPieceToTheBoard('e', 8, new King(ColorPieces.Black, Board));
+            AddPieceToTheBoard('e', 8, new King(ColorPieces.Black, Board, this));
             AddPieceToTheBoard('a', 7, new Pawn(ColorPieces.Black, Board));
             AddPieceToTheBoard('b', 7, new Pawn(ColorPieces.Black, Board));
             AddPieceToTheBoard('c', 7, new Pawn(ColorPieces.Black, Board));
