@@ -60,15 +60,15 @@ namespace chess.game.pieces
             {
                 
                 Position left = new Position(Position.Line, Position.Column - PieceStep);
-                if  (Board.IsValidPosition(left) && CanMove(left) && Board.GetPiece(left) == GameChess.EnPassantVuln)
+                if  (Board.IsValidPosition(left) && CanMove(left) && GameChess.EnPassantVuln != null && Board.GetPiece(left) == GameChess.EnPassantVuln)
                 {
-                    movements[left.Line - 1, left.Column] = true;
+                    movements[left.Line - PieceStep, left.Column] = true;
                 }
 
                 Position right = new Position(Position.Line, Position.Column + PieceStep);
-                if (Board.IsValidPosition(right) && CanMove(right) && Board.GetPiece(right) == GameChess.EnPassantVuln)
+                if (Board.IsValidPosition(right) && CanMove(right) && GameChess.EnPassantVuln != null && Board.GetPiece(right) == GameChess.EnPassantVuln)
                 {
-                    movements[right.Line - 1, right.Column] = true;
+                    movements[right.Line - PieceStep, right.Column] = true;
                 }
             }
 
@@ -77,15 +77,15 @@ namespace chess.game.pieces
             {
 
                 Position left = new Position(Position.Line, Position.Column + PieceStep);
-                if (Board.IsValidPosition(left) && CanMove(left) && Board.GetPiece(left) == GameChess.EnPassantVuln)
+                if (Board.IsValidPosition(left) && CanMove(left) && GameChess.EnPassantVuln != null && Board.GetPiece(left) == GameChess.EnPassantVuln)
                 {
-                    movements[left.Line + 1, left.Column] = true;
+                    movements[left.Line + PieceStep, left.Column] = true;
                 }
 
                 Position right = new Position(Position.Line, Position.Column - PieceStep);
-                if (Board.IsValidPosition(right) && CanMove(right) && Board.GetPiece(right) == GameChess.EnPassantVuln)
+                if (Board.IsValidPosition(right) && CanMove(right) && GameChess.EnPassantVuln != null && Board.GetPiece(right) == GameChess.EnPassantVuln)
                 {
-                    movements[right.Line + 1, right.Column] = true;
+                    movements[right.Line + PieceStep, right.Column] = true;
                 }
             }
 

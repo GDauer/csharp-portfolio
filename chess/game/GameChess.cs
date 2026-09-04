@@ -95,19 +95,35 @@ namespace chess.game
             Console.Write(ActualPlayer + separator);
 
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("🏆");
+            Console.Write("\U0001F3C6");
             Console.ForegroundColor = aux;
         }
 
         public void Play(Position start, Position end)
         {
             Piece? capturedPiece = DoMov(start, end);
+            Piece piece = Board.GetPiece(end);
 
             // It's not allowed to put yourself in check
             if (IsKingInCheck(ActualPlayer))
             {
                 UndoMovement(start, end, capturedPiece);
                 throw new AddPieceToBoardPositionException("You can not put or keep yourself in Check.");
+            }
+
+            //Special mov Pawn promotion
+            if (piece is Pawn)
+            {
+                //Check end of line for each color
+                if ((piece.ColorPieces == ColorPieces.White && end.Line == 0) || (piece.ColorPieces == ColorPieces.Black && end.Line == 7))
+                {
+                    piece = Board.RemovePiece(end);
+                    Pieces.Remove(piece);
+                    Console.WriteLine("Type the First letter of the piece you want to promote your pawn with (T = Tower, Q = Queen, K = Knight, B = Bishop)");
+                    string? input = Console.ReadLine();
+
+                    PromotePawn(input, piece, end);
+                }
             }
 
             IsCheck = IsKingInCheck(GetEnemyPiece(ActualPlayer));
@@ -120,7 +136,6 @@ namespace chess.game
             }
 
             // Special mov En Passant - Vulnerability check
-            Piece piece = Board.GetPiece(end);
             EnPassantVuln = null;
 
             // Check if the pawn moved exactly 2 squares up or down from its starting position
@@ -128,6 +143,29 @@ namespace chess.game
             {
                 EnPassantVuln = piece;
             }
+        }
+
+        private void PromotePawn(string pieceChoosen, Piece piece, Position destination)
+        {
+            Piece promoted = new Queen(piece.ColorPieces, Board); ;
+            switch (pieceChoosen)
+            {
+                case "Q":
+                    promoted = new Queen(piece.ColorPieces, Board);
+                    break;
+                case "T":
+                    promoted = new Tower(piece.ColorPieces, Board);
+                    break;
+                case "K":
+                    promoted = new Knight(piece.ColorPieces, Board);
+                    break;
+                case "B":
+                    promoted = new Bishop(piece.ColorPieces, Board);
+                    break;
+            }
+
+            Board.AddPiece(promoted, destination);
+            Pieces.Add(promoted);
         }
 
         public bool IsCheckMateToPlayer(ColorPieces colorPieces)
